@@ -1,5 +1,4 @@
 import json
-from c_struct import Cstruct, MyEncoder
 
 types = {'int': 4, 
         'float': 4, 
