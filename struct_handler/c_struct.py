@@ -1,5 +1,4 @@
-import json
-from json import JSONEncoder
+
 
 class Cstruct():
     def __init__(self, name: str, var: list):
@@ -13,8 +12,9 @@ class Cstruct():
         c_struct = "typedef struct {\n"
         for var in self.variables_list:
             c_struct += "   {} {};\n".format(var[0], var[1])
-        c_struct += "} " +  "{};".format(self.name)
+        c_struct += "} " + "{};".format(self.name)
         return c_struct
+
 
 x = Cstruct("test", [["uint8_t", "x"], ["uint32_t", "var"]])
 print(x.create_c_struct())

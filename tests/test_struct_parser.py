@@ -4,13 +4,17 @@ from struct_handler.struct_reader import StructParser
 
 STRUCT_PATH = "/tests/test_struct.c"
 
+
 class TestStructReader:
     def test_read_struct_from_file(self):
         name = "my_struct_t"
-        variables = [["const size_t", "z", None], 
-                    ["uint8_t", "x", None], 
-                    ["float", "a", None], 
-                    ["volatile uint64_t", "test", "5"]]
+        variables = [
+            ["const size_t", "z", None],
+            ["uint8_t", "x", None],
+            ["float", "a", None],
+            ["volatile uint64_t", "test", "5"]
+        ]
+
         sp = StructParser()
         sp.getVariablesFromFile(os.getcwd() + STRUCT_PATH)
 
@@ -28,5 +32,5 @@ class TestStructReader:
         sp = StructParser()
         sp.getVariablesFromFile(os.getcwd() + STRUCT_PATH)
         unknown = sp.checkTypesAndReturnUnknown()
-        
+
         assert unknown == corrcet_unknown_list
