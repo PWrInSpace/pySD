@@ -23,7 +23,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install flake8 pytest tox
       - name: run tox
-        run : tox
+        run : |
+          tox
+          tox -e flake
+          tox -e test
     
     
     

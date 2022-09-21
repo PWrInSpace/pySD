@@ -1,36 +1,65 @@
 import pytest
 import os
-from struct_handler.struct_reader import StructParser
+from struct_reader import StructParser
+from c_struct import Cstruct
 
-STRUCT_PATH = "/tests/test_struct.c"
+VALID_STRUCT_PATH = "/tests/valid_struct.c"
+STRUCT_WITHOUT_PREFIX = '/tests/without_prefix.c'
+STRUCT_WITHOUT_MAIN_PREFIX = "/tests/without_main_prefix.c"
+EMPTY_FILE = "/tests/empty_file.c"
+RANDOM_CODE_WITHOUT_STRUCT = "/tests/random_c_code.c"
+NESTED_STRUCT = "/tests/nested_struct.c"
 
 
-class TestStructReader:
-    def test_read_struct_from_file(self):
-        name = "my_struct_t"
-        variables = [
-            ["const size_t", "z", None],
-            ["uint8_t", "x", None],
-            ["float", "a", None],
-            ["volatile uint64_t", "test", "5"]
-        ]
+@pytest.fixture
+def parser():
+    return StructParser()
 
-        sp = StructParser()
-        sp.getVariablesFromFile(os.getcwd() + STRUCT_PATH)
 
-        assert name == sp.struct_name
-        assert variables == sp.variable_list
+@pytest.fixture
+def c_struct_list_from_valid_struct():
+    c_struct_list = []
+    var = Cstruct("pysd_my_struct_t", [['size_t', 'z'], ['uint8_t', 'x'], ['float', 'a']])
+    c_struct_list.append(var)
+    var = Cstruct("pysd_test", [['uint64_t', 'x'], ['int32_t', 'test']])
+    c_struct_list.append(var)
+    var = Cstruct("pysdmain_dataframe", [['uint64_t', 'x'], ['int32_t', 'test']])
+    c_struct_list.append(var)
+    return c_struct_list
 
-    def test_pass_unknown_file(slef):
-        sp = StructParser()
 
-        with pytest.raises(FileNotFoundError):
-            sp.getVariablesFromFile("test.xddd")
+def test_get_structs_from_file(parser, c_struct_list_from_valid_struct):
+    parser.get_structs_from_file(os.getcwd() + VALID_STRUCT_PATH)
+    acctual_names = [var.name for var in parser.structs_list]
+    acctual_variables = [var.types_list for var in parser.structs_list]
+    expect_names = [var.name for var in c_struct_list_from_valid_struct]
+    expect_variables = [var.types_list for var in c_struct_list_from_valid_struct]
 
-    def test_return_unknown_types(self):
-        corrcet_unknown_list = ["size_t"]
-        sp = StructParser()
-        sp.getVariablesFromFile(os.getcwd() + STRUCT_PATH)
-        unknown = sp.checkTypesAndReturnUnknown()
+    assert expect_names == acctual_names
+    assert expect_variables == acctual_variables
 
-        assert unknown == corrcet_unknown_list
+
+def test_pass_file_without_struct(parser):
+    with pytest.raises(ValueError):
+        parser.get_structs_from_file(os.getcwd() + NESTED_STRUCT)
+    with pytest.raises(ValueError):
+        parser.get_structs_from_file(os.getcwd() + EMPTY_FILE)
+
+    with pytest.raises(ValueError):
+        parser.get_structs_from_file(os.getcwd() + RANDOM_CODE_WITHOUT_STRUCT)
+
+
+def test_check_prefixes(parser):
+    parser.get_structs_from_file(os.getcwd() + VALID_STRUCT_PATH)
+    try:
+        parser.check_prefixes()
+    except ValueError:
+        pytest.fail("Unexpected MyError ..")
+
+    parser.get_structs_from_file(os.getcwd() + STRUCT_WITHOUT_PREFIX)
+    with pytest.raises(ValueError):
+        parser.check_prefixes()
+
+    parser.get_structs_from_file(os.getcwd() + STRUCT_WITHOUT_MAIN_PREFIX)
+    with pytest.raises(ValueError):
+        parser.check_prefixes()

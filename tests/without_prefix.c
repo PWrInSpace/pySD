@@ -4,7 +4,7 @@ typedef struct{
     uint8_t x;
     float a;
     uint64_t test;
-}pysd_my_struct_t;
+}sd_my_struct_t;
 
 
 typedef struct{
