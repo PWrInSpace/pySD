@@ -3,7 +3,7 @@
 class Cstruct():
     def __init__(self, name: str, var: list):
         self._name = name
-        self._types_list = var[:]
+        self._variable_list = var[:]
 
     def struct_to_list(self) -> list:
         return [self.name, self.types_list]
@@ -23,8 +23,12 @@ class Cstruct():
         return self._name
 
     @property
+    def variable_list(self):
+        return self._variable_list
+
+    @property
     def types_list(self):
-        return self._types_list
+        return [var[0] for var in self._variable_list]
 
 
 # x = Cstruct("test", [["uint8_t", "x"], ["uint32_t", "var"]])

@@ -2,7 +2,7 @@ import os
 from c_struct import Cstruct
 
 c_keywords = ["const", "static", "volatile"]
-c_types = {
+c_types = [
     'int',
     'float',
     'double',
@@ -17,7 +17,7 @@ c_types = {
     'int64_t',
     'size_t',
     'unsigned int'
-}
+]
 
 main_struct_prefix = "pysdmain"
 sub_structs_prefix = "pysd"
@@ -26,7 +26,6 @@ sub_structs_prefix = "pysd"
 class StructParser():
     def __init__(self):
         self.structs_list = []
-        self._cwd = os.getcwd()
 
     def _check_is_struct_begin(self, line):
         return '{' in line and 'struct' in line
@@ -73,6 +72,19 @@ class StructParser():
         if True not in [var.name.startswith(main_struct_prefix) for var in self.structs_list]:
             raise ValueError("Can't find struct with pysdmain prefix")
 
+    def add_structs_to_types(self):
+        for var in self.structs_list:
+            c_types.append(var.name)
+
+    def check_types_in_structs(self):
+        types_in_structs = []
+        for var in self.structs_list:
+            types_in_structs += var.types_list
+
+        for var_type in types_in_structs:
+            if var_type not in c_types:
+                raise ValueError(f"Type {var_type} is unknown :C")
+
     @property
     def variable_list(self):
         return self.structs_list
@@ -81,8 +93,8 @@ class StructParser():
 def fnc():
     x = StructParser()
     x.get_structs_from_file(os.getcwd() + "/struct.c")
-    print([i.__str__() for i in x.variable_list])
     x.check_prefixes()
+    x.check_types_in_structs()
 
 
 if __name__ == '__main__':

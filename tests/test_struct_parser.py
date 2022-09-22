@@ -9,6 +9,7 @@ STRUCT_WITHOUT_MAIN_PREFIX = "/tests/without_main_prefix.c"
 EMPTY_FILE = "/tests/empty_file.c"
 RANDOM_CODE_WITHOUT_STRUCT = "/tests/random_c_code.c"
 NESTED_STRUCT = "/tests/nested_struct.c"
+STRUCT_WITH_UNKNOWN_TYPE = "/tests/struct_with_unknown_type.c"
 
 
 @pytest.fixture
@@ -21,7 +22,7 @@ def c_struct_list_from_valid_struct():
     c_struct_list = []
     var = Cstruct("pysd_my_struct_t", [['size_t', 'z'], ['uint8_t', 'x'], ['float', 'a']])
     c_struct_list.append(var)
-    var = Cstruct("pysd_test", [['uint64_t', 'x'], ['int32_t', 'test']])
+    var = Cstruct("pysd_test", [['uint64_t', 'x'], ['pysd_my_struct_t', 'test']])
     c_struct_list.append(var)
     var = Cstruct("pysdmain_dataframe", [['uint64_t', 'x'], ['int32_t', 'test']])
     c_struct_list.append(var)
@@ -63,3 +64,25 @@ def test_check_prefixes(parser):
     parser.get_structs_from_file(os.getcwd() + STRUCT_WITHOUT_MAIN_PREFIX)
     with pytest.raises(ValueError):
         parser.check_prefixes()
+
+
+def test_check_types_in_struct(parser):
+    parser.get_structs_from_file(os.getcwd() + STRUCT_WITHOUT_PREFIX)
+    try:
+        parser.check_types_in_structs()
+    except ValueError:
+        pytest.fail("Unexpected MyError ..")
+
+    parser.get_structs_from_file(os.getcwd() + VALID_STRUCT_PATH)
+    with pytest.raises(ValueError):
+        parser.check_types_in_structs()
+
+    parser.add_structs_to_types()
+    try:
+        parser.check_types_in_structs()
+    except ValueError:
+        pytest.fail("Unexpected MyError ..")
+
+    parser.get_structs_from_file(os.getcwd() + STRUCT_WITH_UNKNOWN_TYPE)
+    with pytest.raises(ValueError):
+        parser.check_types_in_structs()

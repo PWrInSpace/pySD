@@ -15,4 +15,5 @@ typedef struct{
 typedef struct{
     uint64_t x;
     int32_t test;
+    dupa test;
 }pysdmain_dataframe;

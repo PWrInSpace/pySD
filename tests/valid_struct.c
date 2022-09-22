@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <stdio.h>
 typedef struct{
     const size_t z;
     uint8_t x;
@@ -8,7 +9,7 @@ typedef struct{
 
 typedef struct{
     uint64_t x;
-    int32_t test;
+    pysd_my_struct_t test;
 }pysd_test;
 
 typedef struct{
