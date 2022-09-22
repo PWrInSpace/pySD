@@ -7,4 +7,5 @@ setup(
    description='Protstruct',
    author='Jakub Siuda',
    author_email='pwrinspace@pwr.edu.pl',
+   py_modules=[]
 )
