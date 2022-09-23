@@ -1,5 +1,6 @@
 import os
 from c_struct import Cstruct
+from c_types import CVariable
 
 c_keywords = ["const", "static", "volatile"]
 c_types = [
@@ -23,9 +24,9 @@ main_struct_prefix = "pysdmain"
 sub_structs_prefix = "pysd"
 
 
-class StructParser():
+class StructReader():
     def __init__(self):
-        self.structs_list = []
+        self._structs_list: list[Cstruct] = []
 
     def _check_is_struct_begin(self, line):
         return '{' in line and 'struct' in line
@@ -35,7 +36,7 @@ class StructParser():
 
     def get_structs_from_file(self, file_path) -> list:
         is_reading_struct = False
-        types_buffer = []
+        variables_buffer = []
 
         file = open(file_path, "r")
         for line in file:
@@ -48,50 +49,58 @@ class StructParser():
             elif self._check_is_struct_end(line) is True and is_reading_struct is True:
                 is_reading_struct = False
                 name = line.replace('}', '').replace(';', '').replace('\n', '').strip()
-                self.structs_list.append(Cstruct(name, types_buffer))
-                types_buffer.clear()
+                self._structs_list.append(Cstruct(name, variables_buffer))
+                variables_buffer.clear()
 
             elif is_reading_struct is True:
                 line = line.replace('\n', '').replace(';', '').lstrip()
                 var = line.split(' ')
-                # keyword case
                 if var[0] == 'unsigned':
-                    types_buffer([var[0] + ' ' + var[1], var[2]])
+                    variables_buffer([])
+                    variables_buffer.append(CVariable(var[0] + ' ' + var[1], var[2]))
                 elif var[0] in c_keywords:
-                    types_buffer.append([var[1], var[2]])
+                    variables_buffer.append(CVariable(var[1], var[2]))
                 else:
-                    types_buffer.append([var[0], var[1]])
+                    variables_buffer.append(CVariable(var[0], var[1]))
 
-        if len(self.structs_list) == 0:
+        if len(self._structs_list) == 0:
             raise ValueError("File do not have structs")
 
+    def _contains_struct_without_prefix(self):
+        return False in [
+            struct.name.startswith(sub_structs_prefix) for struct in self._structs_list
+        ]
+
+    def _do_not_contains_struct_with_main_prefix(self):
+        return True not in [var.name.startswith(main_struct_prefix) for var in self._structs_list]
+
     def check_prefixes(self):
-        if False in [var.name.startswith(sub_structs_prefix) for var in self.structs_list]:
+        if self._contains_struct_without_prefix() is True:
             raise ValueError("Struct do not have pysd prefix")
 
-        if True not in [var.name.startswith(main_struct_prefix) for var in self.structs_list]:
+        if self._do_not_contains_struct_with_main_prefix() is True:
             raise ValueError("Can't find struct with pysdmain prefix")
 
-    def add_structs_to_types(self):
-        for var in self.structs_list:
-            c_types.append(var.name)
+    def add_user_structs_to_known_types(self):
+        for struct in self._structs_list:
+            c_types.append(struct.name)
 
     def check_types_in_structs(self):
         types_in_structs = []
-        for var in self.structs_list:
-            types_in_structs += var.types_list
+        for struct in self._structs_list:
+            types_in_structs += struct.types
 
-        for var_type in types_in_structs:
-            if var_type not in c_types:
-                raise ValueError(f"Type {var_type} is unknown :C")
+        for variable_type in types_in_structs:
+            if variable_type not in c_types:
+                raise ValueError(f'Type {variable_type} is unknown :C')
 
     @property
-    def variable_list(self):
-        return self.structs_list
+    def structs_list(self):
+        return self._structs_list
 
 
 def fnc():
-    x = StructParser()
+    x = StructReader()
     x.get_structs_from_file(os.getcwd() + "/struct.c")
     x.check_prefixes()
     x.check_types_in_structs()

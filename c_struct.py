@@ -1,34 +1,36 @@
+from c_types import CVariable
 
 
 class Cstruct():
-    def __init__(self, name: str, var: list):
-        self._name = name
-        self._variable_list = var[:]
+    def __init__(self, struct_name: str, variables: list[CVariable]):
+        self._name = struct_name
+        self._variables = variables[:]
 
-    def struct_to_list(self) -> list:
-        return [self.name, self.types_list]
+    def remove_by_variable_type(self, c_type: str):
+        self._variables = [variable for variable in self._variables if variable.type != c_type]
 
-    def create_c_struct(self) -> str:
-        c_struct = "typedef struct {\n"
-        for var in self.types_list:
-            c_struct += "   {} {};\n".format(var[0], var[1])
-        c_struct += "} " + "{};".format(self.name)
-        return c_struct
+    def replace_by_variable_type(self, c_type, new_types: list[CVariable]):
+        self.remove_by_variable_type(c_type)
+        for var in new_types:
+            self._variables.append(var)
+
+    def remove_by_variable_name(self, var_name):
+        self._variables = [var for var in self._variables if var.name != var_name]
 
     def __str__(self):
-        return f'{self.name} {self.types_list.__str__()}'
+        return f'{self.name} {self._variables}'
 
     @property
     def name(self):
         return self._name
 
     @property
-    def variable_list(self):
-        return self._variable_list
+    def variables(self):
+        return self._variables
 
     @property
-    def types_list(self):
-        return [var[0] for var in self._variable_list]
+    def types(self):
+        return [var.type for var in self._variables]
 
 
 # x = Cstruct("test", [["uint8_t", "x"], ["uint32_t", "var"]])
