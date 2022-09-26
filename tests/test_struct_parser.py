@@ -30,7 +30,6 @@ def c_struct_list_from_valid_struct():
         ])
     c_struct_list.append(var)
 
-
     var = Cstruct(
         "pysd_test",
         [

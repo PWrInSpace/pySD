@@ -1,27 +1,7 @@
 import os
 from c_struct import Cstruct
 from c_types import CVariable
-
-c_keywords = ["const", "static", "volatile"]
-c_types = [
-    'int',
-    'float',
-    'double',
-    'char',
-    'uint8_t',
-    'uint16_t',
-    'uint32_t',
-    'uint64_t',
-    'int8_t',
-    'int16_t',
-    'int32_t',
-    'int64_t',
-    'size_t',
-    'unsigned int'
-]
-
-main_struct_prefix = "pysdmain"
-sub_structs_prefix = "pysd"
+from config import C_KEYWORDS, C_TYPES, MAIN_STRUCT_PREFIX, SUB_STRUCTS_PREFIX
 
 
 class StructReader():
@@ -58,7 +38,7 @@ class StructReader():
                 if var[0] == 'unsigned':
                     variables_buffer([])
                     variables_buffer.append(CVariable(var[0] + ' ' + var[1], var[2]))
-                elif var[0] in c_keywords:
+                elif var[0] in C_KEYWORDS:
                     variables_buffer.append(CVariable(var[1], var[2]))
                 else:
                     variables_buffer.append(CVariable(var[0], var[1]))
@@ -68,11 +48,11 @@ class StructReader():
 
     def _contains_struct_without_prefix(self):
         return False in [
-            struct.name.startswith(sub_structs_prefix) for struct in self._structs_list
+            struct.name.startswith(SUB_STRUCTS_PREFIX) for struct in self._structs_list
         ]
 
     def _do_not_contains_struct_with_main_prefix(self):
-        return True not in [var.name.startswith(main_struct_prefix) for var in self._structs_list]
+        return True not in [var.name.startswith(MAIN_STRUCT_PREFIX) for var in self._structs_list]
 
     def check_prefixes(self):
         if self._contains_struct_without_prefix() is True:
@@ -83,7 +63,7 @@ class StructReader():
 
     def add_user_structs_to_known_types(self):
         for struct in self._structs_list:
-            c_types.append(struct.name)
+            C_TYPES.append(struct.name)
 
     def check_types_in_structs(self):
         types_in_structs = []
@@ -91,7 +71,7 @@ class StructReader():
             types_in_structs += struct.types
 
         for variable_type in types_in_structs:
-            if variable_type not in c_types:
+            if variable_type not in C_TYPES:
                 raise ValueError(f'Type {variable_type} is unknown :C')
 
     @property

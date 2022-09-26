@@ -1,6 +1,6 @@
 from c_struct import Cstruct
 from c_types import CVariable
-from struct_reader import main_struct_prefix
+from config import MAIN_STRUCT_PREFIX
 
 
 class StructConverter():
@@ -14,7 +14,7 @@ class StructConverter():
     def _remove_main_struct_from_list(self):
         self.list_of_c_structs = [
             struct for struct in self.list_of_c_structs
-            if struct.name.startswith(main_struct_prefix) is False
+            if struct.name.startswith(MAIN_STRUCT_PREFIX) is False
         ]
 
     def _remove_struct_from_list(self, name):
@@ -31,7 +31,7 @@ class StructConverter():
     def _get_main_struct(self) -> Cstruct:
         return [
             struct for struct in self.list_of_c_structs
-            if struct.name.startswith(main_struct_prefix)
+            if struct.name.startswith(MAIN_STRUCT_PREFIX)
         ][0]
 
     def _expand_structs_in_main_struct(self):

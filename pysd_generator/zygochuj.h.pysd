@@ -8,7 +8,7 @@
 #include "...include_to_def..."
 
 #ifdef __cplusplus
-#extern "C" {
+extern "C" {
 #endif
 
 void pysd_create_header(char*buffer, size_t size, ...pysd_main_name... pysd_main);

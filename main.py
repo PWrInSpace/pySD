@@ -1,6 +1,7 @@
+from config import DEFAULT_DIR_NAME
 from struct_reader import StructReader
 from struct_converter import StructConverter
-# from pysd_file_creator import PYSDFileCreator
+from pysd_file_creator import PYSDFileCreator
 import os
 
 
@@ -12,8 +13,13 @@ def main():
     struct_converter = StructConverter(read_struct.structs_list)
     print(struct_converter.main_struct)
 
-    # file = PYSDFileCreator("pysd_generator", "XDDD", struct_converter.main_struct)
-    # file.configure_h_file()
+    file = PYSDFileCreator(
+        struct_converter.main_struct,
+        "struct.c",
+        DEFAULT_DIR_NAME,
+    )
+    file.save_c_file(file.create_c_file())
+    file.save_h_file(file.create_h_file())
 
 
 if __name__ == "__main__":

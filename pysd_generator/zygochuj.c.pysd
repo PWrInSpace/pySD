@@ -1,4 +1,5 @@
 #include <string.h>
+#include "...pysd_h_include..."
 
 void pysd_create_header(char *buffer, size_t size, ...pysd_main_name... pysd_main) {
     snprintf(buffer, size, ...header_text...);
