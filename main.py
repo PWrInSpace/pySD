@@ -6,7 +6,9 @@ from file_system import FileSystem
 from config import DEFAULT_DIR_NAME, bcolors
 
 STARTUP_FLAGS = {
-    '-d': FileSystem.set_path_to_output_dir
+    '-d': FileSystem.set_path_to_both_file_output,
+    '-dc': FileSystem.set_path_to_c_file_output,
+    '-dh': FileSystem.set_path_to_h_file_output,
 }
 
 

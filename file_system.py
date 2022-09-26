@@ -5,7 +5,8 @@ from config import FILE_PREFIX, H_FILE_NAME, C_FILE_NAME, TEMPLATE_C_PATH,\
 
 
 class FileSystem():
-    OUTPUT_DIR = DEFAULT_DIR_NAME
+    OUTPUT_DIR_C_FILE = DEFAULT_DIR_NAME
+    OUTPUT_DIR_H_FILE = DEFAULT_DIR_NAME
 
     def __init__(self):
         self.program_dir = os.getcwd()
@@ -13,8 +14,17 @@ class FileSystem():
         self.project_dir = os.getcwd()
 
     @classmethod
-    def set_path_to_output_dir(self, output_dir):
-        self.OUTPUT_DIR = output_dir + "/pysd/"
+    def set_path_to_h_file_output(self, output_dir):
+        self.OUTPUT_DIR_H_FILE = output_dir + "/pysd/"
+
+    @classmethod
+    def set_path_to_c_file_output(self, output_dir):
+        self.OUTPUT_DIR_C_FILE = output_dir + "/pysd/"
+
+    @classmethod
+    def set_path_to_both_file_output(self, output_dir):
+        self.set_path_to_c_file_output(output_dir)
+        self.set_path_to_h_file_output(output_dir)
 
     def _get_paths_to_pysd_files(self) -> list:
         paths = []
@@ -34,10 +44,10 @@ class FileSystem():
         return str(valid_paths[0])
 
     def save_c_file(self, file_body):
-        self.save_file(self.OUTPUT_DIR + C_FILE_NAME, file_body)
+        self.save_file(self.OUTPUT_DIR_C_FILE + C_FILE_NAME, file_body)
 
     def save_h_file(self, file_body):
-        self.save_file(self.OUTPUT_DIR + H_FILE_NAME, file_body)
+        self.save_file(self.OUTPUT_DIR_H_FILE + H_FILE_NAME, file_body)
 
     def save_file(self, path_to_file, file_body):
         with open(path_to_file, 'w') as file:
@@ -54,7 +64,8 @@ class FileSystem():
             return template.read()
 
     def check_if_save_dir_exist(self):
-        return os.path.isdir(self.OUTPUT_DIR)
+        return os.path.isdir(self.OUTPUT_DIR_C_FILE) and os.path.isdir(self.OUTPUT_DIR_H_FILE)
 
     def create_directory(self):
-        os.mkdir(self.OUTPUT_DIR)
+        os.mkdir(self.OUTPUT_DIR_H_FILE)
+        os.mkdir(self.OUTPUT_DIR_C_FILE)
