@@ -32,10 +32,15 @@ def main():
         DEFAULT_DIR_NAME,
     )
 
-    file_system.save_c_file(file.create_c_file(), DEFAULT_DIR_NAME)
-    file_system.save_h_file(file.create_h_file(), DEFAULT_DIR_NAME)
+    if file_system.check_if_save_dir_exist(DEFAULT_DIR_NAME) is False:
+        file_system.create_directory(DEFAULT_DIR_NAME)
 
-    print(f"{bcolors.OKGREEN}pysd files created at {DEFAULT_DIR_NAME} director :){bcolors.ENDC}")
+    c_file_template = file_system.get_c_template_from_file()
+    file_system.save_c_file(file.create_c_file(c_file_template), DEFAULT_DIR_NAME)
+    h_file_template = file_system.get_h_template_from_file()
+    file_system.save_h_file(file.create_h_file(h_file_template), DEFAULT_DIR_NAME)
+
+    print(f"{bcolors.OKGREEN}pysd files created at {DEFAULT_DIR_NAME} directory :){bcolors.ENDC}")
 
 
 if __name__ == "__main__":

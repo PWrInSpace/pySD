@@ -1,10 +1,12 @@
 import os
 import glob
-from config import FILE_PREFIX, H_FILE_NAME, C_FILE_NAME
+from config import FILE_PREFIX, H_FILE_NAME, C_FILE_NAME, TEMPLATE_C_PATH, TEMPLATE_H_PATH
 
 
 class FileSystem():
     def __init__(self):
+        self.program_dir = os.getcwd()
+        os.chdir("..")
         self.project_dir = os.getcwd()
 
     def _get_paths_to_pysd_files(self) -> list:
@@ -33,3 +35,19 @@ class FileSystem():
     def save_file(self, path_to_file, file_body):
         with open(path_to_file, 'w') as file:
             file.write(file_body)
+
+    def get_c_template_from_file(self):
+        return self.read_from_file(self.program_dir + TEMPLATE_C_PATH)
+
+    def get_h_template_from_file(self):
+        return self.read_from_file(self.program_dir + TEMPLATE_H_PATH)
+
+    def read_from_file(self, file_path):
+        with open(file_path, "r") as template:
+            return template.read()
+
+    def check_if_save_dir_exist(self, directory):
+        return os.path.isdir(directory)
+
+    def create_directory(self, directory):
+        os.mkdir(directory)

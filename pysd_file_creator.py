@@ -19,12 +19,8 @@ class PYSDFileCreator():
         self.path_to_user_structs = path_to_user_structs
         self.path_to_save = path_to_save
 
-    def _get_template_body(self, file_path):
-        with open(file_path, "r") as template:
-            return template.read()
-
-    def create_h_file(self):
-        file_body = self._get_template_body(PATH_TO_H_FILE_TEMPLATE)
+    def create_h_file(self, template):
+        file_body = template
         file_body = self._set_pysd_main_struct(file_body)
         file_body = self._set_user_struct_include_path(file_body, self.path_to_user_structs)
         return file_body
@@ -35,8 +31,8 @@ class PYSDFileCreator():
     def _set_user_struct_include_path(self, file_body, user_struct_include_path):
         return file_body.replace(PYSD_INCLUDE_PATH_TO_DEF_ID, user_struct_include_path)
 
-    def create_c_file(self):
-        file_body = self._get_template_body(PATH_TO_C_FILE_TEMPLATE)
+    def create_c_file(self, template):
+        file_body = template
         file_body = self._set_pysd_main_struct(file_body)
         file_body = self._set_sprintf_specifier(file_body)
         file_body = self._set_sd_frame_variables(file_body)

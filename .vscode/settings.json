@@ -6,6 +6,7 @@
     "python.testing.pytestEnabled": true,
     "files.associations": {
         "stdio.h": "c",
-        "struct.c": "cpp"
+        "struct.c": "cpp",
+        "string.h": "c"
     }
 }
