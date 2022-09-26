@@ -18,9 +18,11 @@ TYPE_TO_SPECIFIER = {
 C_TYPES = list(TYPE_TO_SPECIFIER.keys())
 C_KEYWORDS = ["const", "static", "volatile"]
 
+FILE_PREFIX = "pysd"
+
 MAIN_STRUCT_PREFIX = "pysdmain"
 SUB_STRUCTS_PREFIX = "pysd"
 
-C_FILE_NAME = "pysd.c"
-H_FILE_NAME = "pysd.h"
+C_FILE_NAME = "gen_pysd.c"
+H_FILE_NAME = "gen_pysd.h"
 DEFAULT_DIR_NAME = "pysd/"

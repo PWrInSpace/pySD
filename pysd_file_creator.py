@@ -1,8 +1,8 @@
 from c_struct import Cstruct
 from config import C_FILE_NAME, H_FILE_NAME, TYPE_TO_SPECIFIER
 
-PATH_TO_H_FILE_TEMPLATE = "pysd_generator/zygochuj.h.pysd"
-PATH_TO_C_FILE_TEMPLATE = "pysd_generator/zygochuj.c.pysd"
+PATH_TO_H_FILE_TEMPLATE = "pysd_templates/zygochuj.h.pysd"
+PATH_TO_C_FILE_TEMPLATE = "pysd_templates/zygochuj.c.pysd"
 PYSD_STRUCT_ID = "...pysd_main_name..."
 PYSD_INCLUDE_PATH_TO_DEF_ID = "...include_to_def..."
 PYSD_SPECIFIER_ID = "...sd_frame_specifier..."
@@ -79,13 +79,3 @@ class PYSDFileCreator():
 
     def _set_pysd_include_path(self, file_body):
         return file_body.replace(PYSD_INCLUDE_H_PATH, self.path_to_save + H_FILE_NAME)
-
-    def save_c_file(self, file_body):
-        self.save_file(C_FILE_NAME, file_body)
-
-    def save_h_file(self, file_body):
-        self.save_file(H_FILE_NAME, file_body)
-
-    def save_file(self, file_name, file_body):
-        with open(self.path_to_save + file_name, 'w') as file:
-            file.write(file_body)

@@ -15,7 +15,13 @@ typedef struct{
 }pysd_main_valve;
 
 typedef struct{
+    int16_t dog;
+    float cat;
+}pysd_upust_valve;
+
+typedef struct{
     uint64_t x;
     pysd_pitot pitot;
     pysd_main_valve main_valve;
+    pysd_upust_valve upust_valve;
 }pysdmain_dataframe;
