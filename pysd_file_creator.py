@@ -1,5 +1,5 @@
 from c_struct import Cstruct
-from config import C_FILE_NAME, H_FILE_NAME, TYPE_TO_SPECIFIER
+from config import H_FILE_NAME, TYPE_TO_SPECIFIER
 
 PATH_TO_H_FILE_TEMPLATE = "pysd_templates/zygochuj.h.pysd"
 PATH_TO_C_FILE_TEMPLATE = "pysd_templates/zygochuj.c.pysd"

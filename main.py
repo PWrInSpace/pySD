@@ -4,6 +4,7 @@ from pysd_file_creator import PYSDFileCreator
 from file_system import FileSystem
 from config import DEFAULT_DIR_NAME
 
+
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -30,7 +31,6 @@ def main():
         pysd_file_path,
         DEFAULT_DIR_NAME,
     )
-
 
     file_system.save_c_file(file.create_c_file(), DEFAULT_DIR_NAME)
     file_system.save_h_file(file.create_h_file(), DEFAULT_DIR_NAME)
