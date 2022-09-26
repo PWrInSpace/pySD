@@ -1,23 +1,31 @@
+import sys
 from struct_reader import StructReader
 from struct_converter import StructConverter
 from pysd_file_creator import PYSDFileCreator
 from file_system import FileSystem
-from config import DEFAULT_DIR_NAME
+from config import DEFAULT_DIR_NAME, bcolors
+
+STARTUP_FLAGS = {
+    '-d': FileSystem.set_path_to_output_dir
+}
 
 
-class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKCYAN = '\033[96m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
+def startup_flags_check():
+    arguments = sys.argv[1:]
+    arg_pos = 0
+    while arg_pos < len(arguments):
+        arg = arguments[arg_pos]
+        if arg in STARTUP_FLAGS:
+            arg_pos += 1
+            STARTUP_FLAGS[arg](arguments[arg_pos])
+        else:
+            raise ValueError(f"Unknonw flag {arg}")
+        arg_pos += 1
 
 
 def main():
+    startup_flags_check()
+
     file_system = FileSystem()
     pysd_file_path = file_system.find_path_to_file_with_pysd_structs()
     read_struct = StructReader()
@@ -32,13 +40,13 @@ def main():
         DEFAULT_DIR_NAME,
     )
 
-    if file_system.check_if_save_dir_exist(DEFAULT_DIR_NAME) is False:
-        file_system.create_directory(DEFAULT_DIR_NAME)
+    if file_system.check_if_save_dir_exist() is False:
+        file_system.create_directory()
 
     c_file_template = file_system.get_c_template_from_file()
-    file_system.save_c_file(file.create_c_file(c_file_template), DEFAULT_DIR_NAME)
+    file_system.save_c_file(file.create_c_file(c_file_template))
     h_file_template = file_system.get_h_template_from_file()
-    file_system.save_h_file(file.create_h_file(h_file_template), DEFAULT_DIR_NAME)
+    file_system.save_h_file(file.create_h_file(h_file_template))
 
     print(f"{bcolors.OKGREEN}pysd files created at {DEFAULT_DIR_NAME} directory :){bcolors.ENDC}")
 

@@ -13,6 +13,7 @@ TYPE_TO_SPECIFIER = {
     'int64_t': "%d",
     'size_t': "%lu",
     'unsigned int': "%lu",
+    'bool': "%d"
 }
 
 C_TYPES = list(TYPE_TO_SPECIFIER.keys())
@@ -29,3 +30,15 @@ DEFAULT_DIR_NAME = "pysd/"
 
 TEMPLATE_C_PATH = "/pysd_templates/zygochuj.c.pysd"
 TEMPLATE_H_PATH = "/pysd_templates/zygochuj.h.pysd"
+
+
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'

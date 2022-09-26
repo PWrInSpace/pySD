@@ -6,7 +6,7 @@ size_t pysd_get_header_size(void) {
 }
 
 
-size_t pysd_get_sd_frame_size(pysdmain_dataframe pysd_main) {
+size_t pysd_get_sd_frame_size(...pysd_main_name... pysd_main) {
     return sprintf(NULL, ...sd_frame_specifier..., ...sd_frame_variables...);
 }
 
