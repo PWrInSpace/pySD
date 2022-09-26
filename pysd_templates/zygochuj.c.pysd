@@ -2,12 +2,12 @@
 #include "...pysd_h_include..."
 
 size_t pysd_get_header_size(void) {
-    return sprintf(NULL, ...header_text...);
+    return snprintf(NULL, 0, ...header_text...);
 }
 
 
 size_t pysd_get_sd_frame_size(...pysd_main_name... pysd_main) {
-    return sprintf(NULL, ...sd_frame_specifier..., ...sd_frame_variables...);
+    return snprintf(NULL, 0, ...sd_frame_specifier..., ...sd_frame_variables...);
 }
 
 bool pysd_create_header(char *buffer, size_t size, ...pysd_main_name... pysd_main) {
