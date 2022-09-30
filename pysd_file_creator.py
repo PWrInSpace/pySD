@@ -45,7 +45,7 @@ class PYSDFileCreator():
         for variable in self.main_struct.variables:
             specifier_text += f"{TYPE_TO_SPECIFIER[variable.type]};"
 
-        specifier_text = f'"{specifier_text}"'
+        specifier_text = f'{specifier_text}'
         return specifier_text
 
     def _set_sprintf_specifier(self, file_body):
@@ -67,7 +67,7 @@ class PYSDFileCreator():
         for variable in self.main_struct.variables:
             header_text += f'{variable.name.replace(".", " ")};'
 
-        return f'"{header_text}"'
+        return f'{header_text}'
 
     def _set_header_text(self, file_body):
         header_text = self._create_header_text()
