@@ -41,10 +41,9 @@ class StructReader():
                 elif var[0] in C_KEYWORDS:
                     variables_buffer.append(CVariable(var[1], var[2]))
                 else:
-                    variables_buffer.append(CVariable(var[0], var[1]))
+                    if var[0] != "":
+                        variables_buffer.append(CVariable(var[0], var[1]))
 
-        if len(self._structs_list) == 0:
-            raise ValueError("File do not have structs")
 
     def _contains_struct_without_prefix(self):
         return False in [

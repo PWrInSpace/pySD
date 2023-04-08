@@ -11,7 +11,7 @@ class FileSystem():
 
     def __init__(self):
         self.program_dir = os.getcwd()
-        os.chdir("..")
+        # os.chdir("..")
         self.project_dir = os.getcwd()
 
     @classmethod
@@ -55,14 +55,15 @@ class FileSystem():
         self.save_file(self.OUTPUT_DIR_H_FILE + H_FILE_NAME, file_body)
 
     def save_file(self, path_to_file, file_body):
+        print(path_to_file)
         with open(path_to_file, 'w') as file:
             file.write(file_body)
 
-    def get_c_template_from_file(self):
-        return self.read_from_file(self.program_dir + TEMPLATE_C_PATH)
+    def get_c_template_from_file(self, path):
+        return self.read_from_file(path + TEMPLATE_C_PATH)
 
-    def get_h_template_from_file(self):
-        return self.read_from_file(self.program_dir + TEMPLATE_H_PATH)
+    def get_h_template_from_file(self, path):
+        return self.read_from_file(path + TEMPLATE_H_PATH)
 
     def read_from_file(self, file_path):
         with open(file_path, "r") as template:
@@ -72,5 +73,8 @@ class FileSystem():
         return os.path.isdir(self.OUTPUT_DIR_C_FILE) and os.path.isdir(self.OUTPUT_DIR_H_FILE)
 
     def create_directory(self):
-        os.mkdir(self.OUTPUT_DIR_H_FILE)
-        os.mkdir(self.OUTPUT_DIR_C_FILE)
+        if self.OUTPUT_DIR_C_FILE == self.OUTPUT_DIR_H_FILE:
+            os.mkdir(self.OUTPUT_DIR_H_FILE)
+        else:
+            os.mkdir(self.OUTPUT_DIR_H_FILE)
+            os.mkdir(self.OUTPUT_DIR_C_FILE)

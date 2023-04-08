@@ -26,7 +26,7 @@ SUB_STRUCTS_PREFIX = "pysd"
 
 C_FILE_NAME = "gen_pysd.c"
 H_FILE_NAME = "gen_pysd.h"
-DEFAULT_DIR_NAME = "pysd/"
+DEFAULT_DIR_NAME = "pysd_gen/"
 
 TEMPLATE_C_PATH = "/pysd_templates/zygochuj.c.pysd"
 TEMPLATE_H_PATH = "/pysd_templates/zygochuj.h.pysd"

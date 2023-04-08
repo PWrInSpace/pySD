@@ -74,4 +74,4 @@ class PYSDFileCreator():
         return file_body.replace(PYSD_HEADER_TEXT_ID, header_text)
 
     def _set_pysd_include_path(self, file_body):
-        return file_body.replace(PYSD_INCLUDE_H_PATH, self.path_to_save + H_FILE_NAME)
+        return file_body.replace(PYSD_INCLUDE_H_PATH, H_FILE_NAME)

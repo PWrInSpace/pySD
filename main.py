@@ -45,9 +45,11 @@ def expand_struct(list_of_structs, struct_name):
 def main():
     startup_flags_check()
     reader = StructReader()
-    paths = get_paths_to_c_files(os.getcwd())
+    os.chdir("..")
+    paths = get_paths_to_c_files(f'{os.getcwd()}/components')
     for path in paths:
-        reader.get_structs_from_file(path)
+        if "protobuf" not in path:
+            reader.get_structs_from_file(path)
 
     conv = StructConverter(reader.structs_list, FileSystem.STRUCT)
     print(f"{bcolors.OKCYAN}{conv.main_struct}{bcolors.OKCYAN}")
@@ -60,19 +62,19 @@ def main():
     # read_struct.check_prefixes()
     # # read_struct.add_user_structs_to_known_types()
     # struct_converter = StructConverter(read_struct.structs_list)
-
     file = PYSDFileCreator(
         conv.main_struct,
-        conv.main_struct.path,
+        conv.main_struct.path.split("/")[-1],
         DEFAULT_DIR_NAME,
     )
-
-    if file_system.check_if_save_dir_exist() is False:
-        file_system.create_directory()
-
-    c_file_template = file_system.get_c_template_from_file()
+    os.chdir("pySD")
+    print(os.getcwd())
+    c_file_template = file_system.get_c_template_from_file(os.getcwd())
+    h_file_template = file_system.get_h_template_from_file(os.getcwd())
+    os.chdir("..")
+    os.chdir("components")
+    print(os.getcwd())
     file_system.save_c_file(file.create_c_file(c_file_template))
-    h_file_template = file_system.get_h_template_from_file()
     file_system.save_h_file(file.create_h_file(h_file_template))
 
     print(f"{bcolors.OKGREEN}pysd files created at {DEFAULT_DIR_NAME} directory :){bcolors.ENDC}")
