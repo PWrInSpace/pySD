@@ -4,23 +4,11 @@ from config import MAIN_STRUCT_PREFIX
 
 
 class StructConverter():
-    def __init__(self, list_of_c_structs: list[Cstruct]):
-        self.list_of_c_structs = list_of_c_structs
-        self._main_struct = self._get_main_struct()
-        self._remove_main_struct_from_list()
+    def __init__(self, list_of_c_structs: list[Cstruct], main_struct):
+        self.list_of_c_structs = list_of_c_structs.copy()
+        self._main_struct = self._get_main_struct(main_struct)
         self.structs_names = self._get_helper_structs_names()
         self._expand_structs_in_main_struct()
-
-    def _remove_main_struct_from_list(self):
-        self.list_of_c_structs = [
-            struct for struct in self.list_of_c_structs
-            if struct.name.startswith(MAIN_STRUCT_PREFIX) is False
-        ]
-
-    def _remove_struct_from_list(self, name):
-        self.list_of_c_structs = [
-            struct for struct in self.list_of_c_structs if struct.name == name
-        ]
 
     def _get_helper_structs_names(self):
         return [struct.name for struct in self.list_of_c_structs]
@@ -28,10 +16,10 @@ class StructConverter():
     def _get_struct_from_list(self, struct_name):
         return [struct for struct in self.list_of_c_structs if struct.name == struct_name][0]
 
-    def _get_main_struct(self) -> Cstruct:
+    def _get_main_struct(self, name) -> Cstruct:
         return [
             struct for struct in self.list_of_c_structs
-            if struct.name.startswith(MAIN_STRUCT_PREFIX)
+            if struct.name == name
         ][0]
 
     def _expand_structs_in_main_struct(self):

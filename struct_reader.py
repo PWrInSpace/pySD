@@ -29,7 +29,7 @@ class StructReader():
             elif self._check_is_struct_end(line) is True and is_reading_struct is True:
                 is_reading_struct = False
                 name = line.replace('}', '').replace(';', '').replace('\n', '').strip()
-                self._structs_list.append(Cstruct(name, variables_buffer))
+                self._structs_list.append(Cstruct(name, variables_buffer, file_path))
                 variables_buffer.clear()
 
             elif is_reading_struct is True:

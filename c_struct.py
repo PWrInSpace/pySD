@@ -2,9 +2,10 @@ from c_types import CVariable
 
 
 class Cstruct():
-    def __init__(self, struct_name: str, variables: list[CVariable]):
+    def __init__(self, struct_name: str, variables: list[CVariable], path):
         self._name = struct_name
         self._variables = variables[:]
+        self._path_to_struct = path
 
     def remove_by_variable_type(self, c_type: str):
         self._variables = [variable for variable in self._variables if variable.type != c_type]
@@ -31,6 +32,10 @@ class Cstruct():
     @property
     def types(self):
         return [var.type for var in self._variables]
+    
+    @property
+    def path(self):
+        return self._path_to_struct
 
 
 # x = Cstruct("test", [["uint8_t", "x"], ["uint32_t", "var"]])

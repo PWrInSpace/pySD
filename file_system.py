@@ -7,6 +7,7 @@ from config import FILE_PREFIX, H_FILE_NAME, C_FILE_NAME, TEMPLATE_C_PATH,\
 class FileSystem():
     OUTPUT_DIR_C_FILE = DEFAULT_DIR_NAME
     OUTPUT_DIR_H_FILE = DEFAULT_DIR_NAME
+    STRUCT = ""
 
     def __init__(self):
         self.program_dir = os.getcwd()
@@ -25,6 +26,10 @@ class FileSystem():
     def set_path_to_both_file_output(self, output_dir):
         self.set_path_to_c_file_output(output_dir)
         self.set_path_to_h_file_output(output_dir)
+
+    @classmethod
+    def set_struct(self, struct_name):
+        self.STRUCT = struct_name
 
     def _get_paths_to_pysd_files(self) -> list:
         paths = []
