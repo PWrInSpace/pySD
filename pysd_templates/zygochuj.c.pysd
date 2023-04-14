@@ -46,17 +46,12 @@ size_t pysd_get_sd_frame_size(...pysd_main_name... pysd_main, bool new_line_endi
  * @return size_t size of wrote data, return 0 in case of failure
  */
 size_t pysd_create_header(char *buffer, size_t size, bool new_line_ending) {
-    size_t header_size;
-    header_size = pysd_get_header_size(new_line_ending);
-
-    if (header_size > size) {
-        return false;
-    }
+    size_t header_size = 0;
 
     if (new_line_ending == true) {
-        snprintf(buffer, size, "...header_text...\n");
+        header_size = snprintf(buffer, size, "...header_text...\n");
     } else {
-        snprintf(buffer, size, "...header_text...");
+        header_size = snprintf(buffer, size, "...header_text...");
     }
 
     return header_size;
@@ -72,17 +67,12 @@ size_t pysd_create_header(char *buffer, size_t size, bool new_line_ending) {
  * @return size_t size of wrote data, return 0 in case of failure
  */
 size_t pysd_create_sd_frame(char *buffer, size_t size, ...pysd_main_name... pysd_main, bool new_line_ending) {
-    size_t frame_size;
-    frame_size = pysd_get_sd_frame_size(pysd_main, new_line_ending);
-
-    if (frame_size > size) {
-        return 0;
-    }
+    size_t frame_size = 0 ;
 
     if (new_line_ending == true) {
-        snprintf(buffer, size, "...sd_frame_specifier...\n", ...sd_frame_variables...);
+        frame_size = snprintf(buffer, size, "...sd_frame_specifier...\n", ...sd_frame_variables...);
     } else {
-        snprintf(buffer, size, "...sd_frame_specifier...\n", ...sd_frame_variables...);
+        frame_size = snprintf(buffer, size, "...sd_frame_specifier...", ...sd_frame_variables...);
     }
 
     return frame_size;
