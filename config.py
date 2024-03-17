@@ -7,7 +7,7 @@ TYPE_TO_SPECIFIER = {
     'uint16_t': "%d",
     'uint32_t': "%lu",
     'uint64_t': "%llu",
-    'int8_t': "%c",
+    'int8_t': "%d",
     'int16_t': "%d",
     'int32_t': "%d",
     'int64_t': "%d",
